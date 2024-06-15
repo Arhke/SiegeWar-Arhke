@@ -55,6 +55,11 @@ public class SiegeCamp {
 	 * @return the bannerBlock
 	 */
 	public Block getBannerBlock() {
+		try{
+			return targetTown.getSpawn().getBlock();
+		}catch(Exception e){
+			Bukkit.broadcastMessage(targetTown.getName() + " doesn't have a homeblock, please report this to admins. ");
+		}
 		return bannerBlock;
 	}
 

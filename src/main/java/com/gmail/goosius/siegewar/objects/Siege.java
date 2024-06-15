@@ -208,7 +208,8 @@ public class Siege {
 	}
 
 	public Location getFlagLocation() {
-		return siegeBannerLocation;
+//		return siegeBannerLocation;
+		return siegeKOTHLocation;
 	}
 
 	public void setFlagLocation(Location location) {

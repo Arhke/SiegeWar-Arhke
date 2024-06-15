@@ -45,6 +45,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
@@ -250,8 +251,27 @@ public class SiegeWarTownyEventListener implements Listener {
             return;
         if(SiegeController.hasActiveSiege(event.getTown()))
             event.setCancelled(false);
+
+
     }
-    
+    @EventHandler
+    public void onBlockPhysics(EntityChangeBlockEvent event) {
+        if (!event.isCancelled())
+            return;
+        if(!SiegeWarSettings.getWarSiegeEnabled())
+            return;
+        if (!TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld()).isWarAllowed())
+            return;
+        if (!BattleSession.getBattleSession().isActive())
+            return;
+        Town town = TownyAPI.getInstance().getTown(event.getBlock().getLocation());
+        if(town == null)
+            return;
+        if(SiegeController.hasActiveSiege(town))
+            event.setCancelled(false);
+        if (!event.getBlock().getType().hasGravity()) return;
+        event.setCancelled(true);
+    }
     /**
      * Prevent an outlaw being teleported away if the town they are outlawed in has an active siege.
      * @param event OutlawTeleportEvent thrown by Towny.
