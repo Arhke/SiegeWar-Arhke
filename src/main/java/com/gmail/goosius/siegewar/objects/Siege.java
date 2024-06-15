@@ -7,11 +7,13 @@ import com.gmail.goosius.siegewar.settings.SiegeWarSettings;
 import com.palmergames.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import com.palmergames.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -49,6 +51,7 @@ public class Siege {
     private boolean townInvaded;
 	private int numBattleSessionsCompleted;   //When this value hits the server specified max, the siege ends
 	private Location siegeBannerLocation;
+	private Location siegeKOTHLocation;
 	private int siegeBalance;
 	private double warChestAmount;
 	private List<Resident> bannerControllingResidents;  //Soldiers currently controlling the banner
@@ -192,6 +195,11 @@ public class Siege {
 	}
 
 	public void setTown(Town town) {
+		try {
+			this.siegeKOTHLocation = town.getSpawn();
+		} catch (TownyException e) {
+			Bukkit.broadcastMessage(town.getName() + " doesn't have a spawn. Report this to server admin.");
+		}
 		this.town = town;
 	}
 
